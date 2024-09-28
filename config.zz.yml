@@ -1,0 +1,155 @@
+units:
+  # Proxy Spacing Variables
+  # cx = kaihua choc 18mm width
+  # cy = kaihua choc 17mm height
+  kx: cy
+  ky: cy
+  # Padding Variables
+  px: ky + 2
+  py: ky + 2
+  ppx: ky + 4
+  ppy: ky + 4
+points:
+  zones:
+    matrix:
+      anchor:
+        shift: [100, -100]
+      key:
+        padding: 1py
+        spread: 1px
+      columns:
+        pinky:
+          key:
+            splay: 2
+            column_net: P14
+        ring:
+          key:
+            stagger: 12
+            splay: -2
+            column_net: P15
+        middle:
+          key:
+            stagger: 6
+            column_net: P18
+        index:
+          key:
+            stagger: -8
+            splay: -1
+            column_net: P19
+        inner:
+          key:
+            stagger: -6
+            splay: -1
+            column_net: P20
+      rows:
+        bottom:
+          row_net: P10
+        home:
+          row_net: P9
+        top:
+          row_net: P8
+    thumbs:
+      key:
+        padding: 1py
+        spread: 1px
+        rotate: -15
+      anchor:
+        ref: matrix_middle_bottom
+        shift: [5, -35]
+      columns:
+        first:
+          key.rotate: -8
+          key.column_net: P15
+        second:
+          key.rotate: -15
+          key.stagger: -4
+          key.shift: [1, 0]
+          key.column_net: P18
+        third:
+          key.stagger: -7
+          key.rotate: -22
+          key.shift: [1, 0]
+          key.column_net: P19
+        forth:
+          key.stagger: -10
+          key.rotate: -29
+          key.shift: [0, 0]
+          key.column_net: P20
+      rows:
+        cluster:
+          row_net: P16
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+  keys:
+    - what: rectangle
+      where: true
+      bound: false
+      size: [kx, ky]
+  board:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: matrix_pinky_top
+          shift: [-0.5ppx, 0.5ppy]
+        - ref: matrix_ring_top
+          shift: [-0.5ppx, 0.5ppy]
+        - ref: matrix_middle_top
+          shift: [-0.5ppx, 0.5ppy]
+        - ref: matrix_middle_top
+          shift: [0.5ppx, 0.5ppy]
+        - ref: matrix_inner_top
+          shift: [0.5ppx, 0.5ppy]
+        - ref: matrix_inner_top
+          shift: [0.5ppx, 0.2ppy]
+        - ref: matrix_inner_top
+          shift: [1.8ppx, 0.2ppy]
+        - ref: thumbs_forth_cluster
+          shift: [0.5ppx, 0.5ppy]
+        - ref: thumbs_forth_cluster
+          shift: [0.5ppx, -0.5ppy]
+        - ref: thumbs_first_cluster
+          shift: [-0.5ppx, -0.5ppy]
+        - ref: matrix_pinky_bottom
+          shift: [-0.5ppx, -0.5ppy]
+  combo:
+    - name: board
+    - operation: subtract
+      name: keys
+pcbs:
+  tutorial:
+    outlines:
+      main:
+        outline: board
+
+    footprints:
+      chot_hotswap:
+        what: choc
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+
+      diode:
+        what: diode
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -5]
+
+      nice:
+        what: nice
+        params:
+          show_silk_labels_on_both_sides: false
+        where:
+          ref: matrix_inner_top
+          shift: [kx + 7, -14]
+          rotate: 0
